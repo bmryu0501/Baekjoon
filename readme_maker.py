@@ -8,28 +8,42 @@ import numpy as np
 import os
 
 file_list = os.listdir('./codes/')
-problem_list = []
+problems = []
 for i in range(len(file_list)):
-    problem_list.append(file_list[i][:-4]) # slice '.cpp'
+    problems.append(file_list[i][:-4]) # slice '.cpp'
 
-print(problem_list)
+print(problems)
 
-#%% problem title crawling
+#%% problem number + title
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
-url = 'https://www.acmicpc.net/problem/1000'
+for i in range(len(problems)) :
+    # get problem title
+    url = 'https://www.acmicpc.net/problem/' + problems[i]
+    html = urlopen(url)
+    soup = BeautifulSoup(html, 'html.parser')
+    problem_title = soup.find(id='problem_title').contents[0]
 
-html = urlopen(url)
-soup = BeautifulSoup(html, 'html.parser')
+    # make in tuple (number, title)
+    problems[i] = (problems[i], problem_title)
 
-problem_title = soup.find(id='problem_title').contents
-print(problem_title[0])
+print(problems)
 
-#%% make words to display
-for i in range(len(file_list)):
-    file_list[i] = ('- [' + problem_list[i] + ']' +
-                    '(https://www.acmicpc.net/problem/' + problem_list[i] + ')'
-                    )
+#%% Readme contents
+f = open('README.md', 'w')
 
-print(file_list)
+# Title
+f.write('# Baekjoon\n\n')
+
+# Abstract
+
+# Problems
+f.write('## Solved Problems\n')
+for problem in problems:
+    text = ('- [\\[' + problem[0] + '\\] ' + problem[1] + ']' +
+            '(https://www.acmicpc.net/problem/' + problem[0] + ')' + '\n')
+    f.write(text)
+
+f.close()
+# %%
