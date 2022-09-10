@@ -199,16 +199,12 @@ int main() {
         }
     }
 
-    system("PAUSE");
-
     for(int i=0;i<N;i++) {
         for(int j=0;j<M;j++) {
             cout << v[i][j] << ' ';
         }
         cout << '\n';
     }
-
-    system("PAUSE");
 
     /* output */
     cout << fill_area(0, v) << '\n';
