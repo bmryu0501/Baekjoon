@@ -1,46 +1,92 @@
 #include <iostream>
+#include <queue>
+#include <vector>
 #include <cstring>
+//#include <algorithm>
+
+/* STL // https://blockdmask.tistory.com/70
+#include <list>
+#include <map> // https://blockdmask.tistory.com/87
+#include <set>
+#include <stack>
+*/
+
+/* math.h
+#define _USE_MATH_DEFINES // need this to use math defines
 #include <math.h>
+*/
+
+//#include <cstring>
+/* memset
+    // Since byte-by-byte, int should be 0 or -1
+    #include <cstring>
+    memset(arr, 0, sizeof(arr));
+*/
+
+//#include <climits>
+/* <climits>
+CHAR_BIT    char number of bit 
+SCHAR_MIN   signed char
+SCHAR_MAX   signed char
+UCHAR_MAX   unsigned char
+CHAR_MIN    char
+CHAR_MAX    char
+MB_LEN_MAX  multi-byte char max bite
+SHRT_MIN    short int
+SHRT_MAX    short int
+USHRT_MAX   unsigned short int
+INT_MIN     int
+INT_MAX     int
+UINT_MAX    unsigned int
+LONG_MIN    long int
+LONG_MAX    long int
+ULONG_MAX   unsigned long int
+*/
+
+/* customized */ /*
+int dx[4] = {1, -1, 0, 0};
+int dy[4] = {0, 0, 1, -1};
+int dx8[8] = {1, 1, 1, -1, -1, -1, 0, 0};
+int dy8[8] = {-1, 0, 1, -1, 0, 1, -1, 1};
+*/
 
 using namespace std;
 
 /* condition */
-#define MIN_N 3
-#define MAX_N 999
+#define MAX_N 100000
+#define MAX_K 100000
 
 /* variables */
 int N, K;
-int x, y;
-int x_center, y_center;
-int level = 1;
-
-int arr[MAX_N][MAX_N];
-
-//direction {N,  E, S,  W}
-int dx[4] = {-1, 0, 1,  0};
-int dy[4] = {0,  1, 0, -1};
-int direction = 0;
+queue<int> q;
+bool visited[MAX_K];
 
 /* functions */
+int bfs(int start) {
+    q.push(start);
+    visited[start] = true;
+
+    while(!q.empty()) {
+        int x = q.front();
+        q.pop();
+        
+        int way[3] = {x-1, x+1, x*2};
+ 
+        for(int i=0;i<3; i++) {
+            int y = 
+        }
+    }
+}
 
 int main() {
     ios_base :: sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
     /* init */
+    memset(visited, 0, sizeof(visited));
 
     /* input */
     cin >> N >> K;
 
-    x_center = N/2;
-    y_center = N/2;
-    x = N/2;
-    y = N/2;
-
     /* solving */
-    for(int i=1;i<=N*N;i++) {
-        arr[x][y] = i;
-
-        
-    }
 
     /* output */
 }

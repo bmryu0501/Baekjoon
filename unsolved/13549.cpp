@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 //#include <algorithm>
 
 /* STL
@@ -7,7 +8,6 @@
 #include <map> // https://blockdmask.tistory.com/87
 #include <set>
 #include <stack>
-#include <queue>
 */
 
 /* math.h
@@ -52,16 +52,25 @@ int dy8[8] = {-1, 0, 1, -1, 0, 1, -1, 1};
 using namespace std;
 
 /* condition */
+#define MAX_N 100000
+#define MAX_K 100000
 
 /* variables */
+int N, K;
+queue<int> q;
+bool visited[MAX_K];
 
 /* functions */
+int bfs() {
+    
+}
 
 int main() {
     ios_base :: sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
     /* init */
 
     /* input */
+    cin >> N >> K;
 
     /* solving */
 
