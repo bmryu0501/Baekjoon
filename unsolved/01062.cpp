@@ -52,8 +52,12 @@ int dy8[8] = {-1, 0, 1, -1, 0, 1, -1, 1};
 using namespace std;
 
 /* condition */
+#define MAX_N 50
+#define MAX_K 26
 
 /* variables */
+int N, K;
+string words[MAX_N];
 
 /* functions */
 
@@ -62,6 +66,10 @@ int main() {
     /* init */
 
     /* input */
+    cin >> N >> K;
+    for(int i=0;i<N;i++) {
+        cin >> words[i];
+    }
 
     /* solving */
 
