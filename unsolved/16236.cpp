@@ -47,7 +47,7 @@ pair<int, int> bfs(pair<int ,int> start){
     /* init */
     int x, y, time;
 
-    memset(visit, 0, sizeof(visit));
+    memset(visit, false, sizeof(visit));
     visit[start.first][start.second] = true;
 
     queue<pair<pair<int, int>, int>> q;
