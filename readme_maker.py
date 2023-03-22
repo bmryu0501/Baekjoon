@@ -17,11 +17,15 @@ print(problems)
 #%% problem number + title
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import requests
 
 for i in range(len(problems)) :
     # get problem title
     url = 'https://www.acmicpc.net/problem/' + problems[i]
-    html = urlopen(url)
+    ####html = urlopen(url)
+    html = requests.get(url).text
+    print(html)
+#%%
     soup = BeautifulSoup(html, 'html.parser')
     problem_title = soup.find(id='problem_title').contents[0]
 
