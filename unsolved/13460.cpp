@@ -17,44 +17,80 @@ char arr[MAX_N][MAX_M+1];
 Node hole;
 int answer = 11;
 
+bool inRange(Node ball) {
+    return ball.y >= 0 && ball.y < N && ball.x >= 0 && ball.x < M;
+}
+
+void printDebug(Node red, Node blue) {
+    cout << '\n';
+    for(int i=0;i<N;i++) {
+        for(int j=0;j<M;j++) {
+            if(i == red.y && j == red.x) cout << 'R';
+            else if(i == blue.y && j == blue.x) cout << 'B';
+            else cout << arr[i][j];
+        }
+        cout << '\n';
+    }
+    char t;
+    cin >> t;
+}
+
 void dfs(int level, Node red, Node blue) {
-    if(level == 11 || answer < level) return;
+    if(level == 11 || answer <= level) return;
+
+    
 
     for(int d=0;d<4;d++) {
-        int ry = red.y;
-        int rx = red.x;
-        int by = blue.y;
-        int bx = blue.x;
+        Node nr = red;
+        Node nb = blue;
+        int mover= 0;
+        int moveb= 0;
+        bool goner= false;
+        bool goneb= false;
 
-        bool escapeR = false;
-        bool escapeB = false;
+        while(inRange(nr) && arr[nr.y][nr.x] == '.'){
+            nr.y += dy[d];
+            nr.x += dx[d];
+            if(inRange(nr) && arr[nr.y][nr.x] == 'O') {
+                goner = true;
+                break;
+            }
+            ++mover;
+        }
 
-        arr[red.y][red.x] = '.';
-        while(ry >= 0 && ry < N && rx >= 0 && rx < M && arr[ry][rx] == '.') {
-            ry += dy[d];
-            rx += dx[d];
+        while(inRange(nb) && arr[nb.y][nb.x] == '.') {
+            nb.y += dy[d];
+            nb.x += dx[d];
+            if(inRange(nb) && arr[nb.y][nr.x] == 'O') {
+                goneb = true;
+                break;
+            }
+            ++moveb;
         }
-        ry -= dy[d];
-        rx -= dx[d];
-        arr[ry][rx] = 'R';
 
-        arr[blue.y][blue.x] = '.';
-        while(by >= 0 && by < N && bx >= 0 && bx < M && arr[by][bx] == '.') {
-            by += dy[d];
-            bx += dx[d];
-        }
-        by -= dy[d];
-        bx -= dx[d];
-        arr[by][bx] = 'B';
+        nr.y -= dy[d];
+        nr.x -= dx[d];
+        nb.y -= dy[d];
+        nb.x -= dx[d];
 
-        while(ry >= 0 && ry < N && rx >= 0 && rx < M && arr[ry][rx] == '.') {
-            ry += dy[d];
-            rx += dx[d];
+        if(nr.y == nb.y && nr.x == nb.x) {
+            if(mover < moveb) {
+                nr.y -= dy[d];
+                nr.x -= dx[d];
+            } else {
+                nb.y -= dy[d];
+                nb.x -= dx[d];
+            }
         }
-        while(by >= 0 && by < N && bx >= 0 && bx < M && arr[by][bx] == '.') {
-            by += dy[d];
-            bx += dx[d];
+
+        if(goner) {
+            if(goneb) continue;
+            if(answer > level) answer = level;
+            continue;
         }
+
+        if(nr.y == red.y && nr.x == red.x && nb.y == blue.y && nb.x == blue.x) continue;
+        dfs(level+1, nr, nb);
     }
 }
 
@@ -70,7 +106,12 @@ int main() {
         }
     }
 
-    dfs(0, red, blue);
+    arr[red.y][red.x] = '.';
+    arr[blue.y][blue.x] = '.';
+    dfs(1, red, blue);
+
+    if(answer == 11) cout << -1;
+    else cout << answer;
 
     return 0;
 }
