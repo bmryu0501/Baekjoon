@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
 
+#define INF 21e8
 #define MAX_L 100000000
 #define MAX_N 100
 
@@ -15,19 +16,24 @@ struct Line{
 
 int L, N;
 Line lines[MAX_N];
+int y, x, len, dir, time;
+
+int time = 0;
+int ans = INF;
+
+bool check(int idx) {
+    Line* now = &lines[idx];
+    if(now->y < -MAX_L || now->y > MAX_L || now->x < -MAX_L || now->x > MAX_L) return false;
+
+
+    return true;
+}
 
 int main() {
     cin >> L >> N;
-    int y = 0;
-    int x = 0;
-    int len;
-    int dir = 0;
+
     char turn;
-    int time = 0;
-
     for(int i=0;i<N;i++) {
-        int hit = 2e8;
-
         cin >> len >> turn;
         lines[i].y = y;
         lines[i].x = x;
@@ -41,19 +47,12 @@ int main() {
 
         Line* now = &lines[i];
 
-        for(int j=0;j<i;j++) {
-            Line* target = &lines[j];
-
-            
-        }
-
-        if(hit < 1000) {
-            time += hit;
-            break;
-        }
+        if(check(i)) break;
 
         time += len;
     }
+
+    cout << ans;
 
     return 0;
 }
