@@ -16,7 +16,7 @@ struct Line{
 
 int L, N;
 Line lines[MAX_N];
-int y, x, len, dir, time;
+int y, x, len, dir, cur_time;
 int ans = INF;
 
 bool check(int idx) {
@@ -47,7 +47,7 @@ int main() {
 
         if(check(i)) break;
 
-        time += len;
+        cur_time += len;
     }
 
     cout << ans;
