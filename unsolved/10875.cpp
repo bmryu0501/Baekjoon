@@ -17,8 +17,6 @@ struct Line{
 int L, N;
 Line lines[MAX_N];
 int y, x, len, dir, time;
-
-int time = 0;
 int ans = INF;
 
 bool check(int idx) {
