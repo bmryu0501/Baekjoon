@@ -5,8 +5,8 @@ using namespace std;
 #define MAX_L 100000000
 #define MAX_N 100
 
-int dy[4] = {0, 1, 0, -1};
-int dx[4] = {1, 0, -1, 0};
+int dy[4] = {0, 1, 0, -1}; // 홀수: 상하
+int dx[4] = {1, 0, -1, 0}; // 짝수: 좌우
 
 struct Line{
     int y, x;
@@ -19,12 +19,28 @@ Line lines[MAX_N];
 int y, x, len, dir, cur_time;
 int ans = INF;
 
-bool check(int idx) {
+int check(int idx) {
     Line* now = &lines[idx];
-    if(now->y < -MAX_L || now->y > MAX_L || now->x < -MAX_L || now->x > MAX_L) return false;
+    if(y < -MAX_L) return cur_time - (MAX_L - now->y);
+    else if(y > MAX_L) return cur_time + (MAX_L - now->y);
+    else if(x < -MAX_L) return cur_time - (MAX_L - now->x);
+    else if(x > MAX_L) return cur_time + (MAX_L - now->x);
+    for(int i=0;i<idx;i++) {
+        Line* target = &lines[i];
 
+        if(now->dir%2 == target->dir%2) { // 방향이 같다
+            // 같은 선상에 없으면 만날 수 없다
+            if(now->x != target->x && now->y != target->y) return 0;
 
-    return true;
+            if(now->x == target->x && now->y != target->y) { // x만 같은 경우
+                
+            }
+        } else { // 방향이 다르다
+            
+        }
+    }
+
+    return 0;
 }
 
 int main() {
@@ -45,7 +61,8 @@ int main() {
 
         Line* now = &lines[i];
 
-        if(check(i)) break;
+        ans = check(i);
+        if(ans) break;
 
         cur_time += len;
     }
