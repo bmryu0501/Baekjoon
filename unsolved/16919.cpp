@@ -1,10 +1,8 @@
 /*
-16918번 봄버맨
+16919번 봄버맨
 https://www.acmicpc.net/problem/16918
 구현
-그래프 이론
-그래프 탐색
-시뮬레이션
+애드 혹
 */
 
 #include <iostream>
@@ -63,7 +61,10 @@ int main() {
         if(DEBUG) {
             cout << "[" << N << "]\n";
             for(int i=0;i<R;i++) {
-                for(int j=0;j<C;j++) cout << arr[i][j];
+                for(int j=0;j<C;j++) {
+                    if(arr[i][j]) cout << "O";
+                    else cout << ".";
+                }
                 cout << '\n';
             }
             cout << "\n";
