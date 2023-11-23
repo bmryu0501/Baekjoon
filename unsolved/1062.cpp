@@ -1,77 +1,75 @@
 #include <iostream>
-//#include <algorithm>
-
-/* STL
-#include <vector> // https://blockdmask.tistory.com/70
-#include <list>
-#include <map> // https://blockdmask.tistory.com/87
-#include <set>
-#include <stack>
-#include <queue>
-*/
-
-/* math.h
-#define _USE_MATH_DEFINES // need this to use math defines
-#include <math.h>
-*/
-
-//#include <cstring>
-/* memset
-    // Since byte-by-byte, int should be 0 or -1
-    #include <cstring>
-    memset(arr, 0, sizeof(arr));
-*/
-
-//#include <climits>
-/* <climits>
-CHAR_BIT    char number of bit 
-SCHAR_MIN   signed char
-SCHAR_MAX   signed char
-UCHAR_MAX   unsigned char
-CHAR_MIN    char
-CHAR_MAX    char
-MB_LEN_MAX  multi-byte char max bite
-SHRT_MIN    short int
-SHRT_MAX    short int
-USHRT_MAX   unsigned short int
-INT_MIN     int
-INT_MAX     int
-UINT_MAX    unsigned int
-LONG_MIN    long int
-LONG_MAX    long int
-ULONG_MAX   unsigned long int
-*/
-
-/* customized */ /*
-int dx[4] = {1, -1, 0, 0};
-int dy[4] = {0, 0, 1, -1};
-int dx8[8] = {1, 1, 1, -1, -1, -1, 0, 0};
-int dy8[8] = {-1, 0, 1, -1, 0, 1, -1, 1};
-*/
-
+#include <string.h>
 using namespace std;
 
-/* condition */
-#define MAX_N 50
-#define MAX_K 26
+#define MAX_N 50 // number of words
+#define MAX_K 26 // number of alphabets
+#define MAX_LEN 16 // (15 characters) + (1 null character)
 
-/* variables */
 int N, K;
-string words[MAX_N];
+char inputs[MAX_N][MAX_LEN]; // input strings
+int bits[MAX_N]; // used bits for each inputs
+int used_char; // used characters in bits
+int acint; // bits for "anta tica"
+int min_unreadable; // answer = N - min_impossible
 
-/* functions */
+void init() {
+    acint = 0;
+    acint | 1 << 'a' - 'a';
+    acint | 1 << 'c' - 'a';
+    acint | 1 << 'i' - 'a';
+    acint | 1 << 'n' - 'a';
+    acint | 1 << 't' - 'a';
 
-int main() {
-    ios_base :: sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-    /* init */
+    used_char = acint;
 
-    /* input */
-    cin >> N >> K;
-    for(int i=0;i<N;i++) {
-        cin >> words[i];
+    min_unreadable = N;
+}
+
+void dfs(int using_char, int num_chars, int idx_next) {
+    if(num_chars == K) { // base case
+        int cnt = 0;
+        for(int i=0;i<N;i++) {
+            if(bits[i] & (bits[i] ^ using_char) > 0) cnt++; // check if unreadable
+            if(cnt >= min_unreadable) break; // backtracking
+        }
+        min_unreadable = min(min_unreadable, cnt);
     }
 
-    /* solving */
+    // recursive
+    for(int i=idx_next; i<MAX_K; i++) {
+        if(used_char & (1 << idx_next)) { // if char is used
+            dfs(using_char | (1 << idx_next), num_chars + 1, i+1);
+        }
+    }
+}
 
-    /* output */
+int check(int N, int K) {
+    if(K < 5) return 0; //acint
+
+    init();
+
+    for(int i=0;i<N;i++) {
+        cin >> inputs[i];
+        bits[i] | acint;
+        int len = strlen(inputs[i]) - 4;
+        for(int j=4;j<len;j++) { // from after "anta" to before "tica"
+            bits[i] | 1 << (inputs[i][j] - 'a');
+            used_char | 1 << (inputs[i][j] - 'a');
+        }
+    }
+
+    dfs(acint, 5, 0);
+
+    return N - min_unreadable;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+
+    cin >> N >> K;
+
+    cout << check(N, K);
+
+    return 0;
 }
