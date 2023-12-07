@@ -13,6 +13,10 @@ int used_char; // used characters in bits
 int acint; // bits for "anta tica"
 int min_unreadable; // answer = N - min_impossible
 
+int min(int a, int b) {
+    return a<b?a:b;
+}
+
 void init() {
     acint = 0;
     acint | 1 << 'a' - 'a';
