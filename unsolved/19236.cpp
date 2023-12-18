@@ -6,6 +6,7 @@ https://www.acmicpc.net/problem/19236
 
 #include <iostream>
 #include <string.h>
+#include <utility>
 using namespace std;
 
 #define SIZE 4
@@ -21,14 +22,24 @@ struct Fish{
     bool is_alive;
 };
 
-Fish* loc[SIZE][SIZE];
+int loc[SIZE][SIZE];
 Fish fishes[SIZE*SIZE+1];
 int answer = 0;
 
-void swap(Fish* a, Fish* b) {
-    Fish* tmp = a;
-    a = b;
-    b = tmp;
+int max(int a, int b) {
+    return a>b?a:b;
+}
+
+void swap(int a, int b) {
+    loc[fishes[a].y][fishes[a].x] = b;
+    loc[fishes[b].y][fishes[b].x] = a;
+
+    int y = fishes[a].y;
+    int x = fishes[a].x;
+    fishes[a].y = fishes[b].y;
+    fishes[a].x = fishes[b].x;
+    fishes[b].y = y;
+    fishes[b].x = x;
 }
 
 bool isValid(int y, int x) {
@@ -37,17 +48,6 @@ bool isValid(int y, int x) {
 }
 
 void moveFish(int y, int x) {
-    cout << "BEFORE\n";
-    for(int i=0;i<4;i++) {
-        for(int j=0;j<4;j++) {
-            if(i == y && j == x) printf("XX ");
-            else if(loc[i][j]->is_alive) printf("%02d ", loc[i][j]->id);
-            else printf("__ ");
-        }
-        cout << "\n";
-    }
-    cout << "\n";
-
     for(int i=1;i<=SIZE*SIZE;i++) {
         Fish* now = &fishes[i];
         if(!now->is_alive) continue;
@@ -57,48 +57,36 @@ void moveFish(int y, int x) {
             int nx = now->x + dx[nd];
             if(isValid(ny, nx) && !(ny == y && nx == x)) {
                 now->dir = nd;
-                swap(*loc[now->y][now->x], *loc[ny][nx]);
+                swap(loc[now->y][now->x], loc[ny][nx]);
                 break;
             }
         }
     }
-
-    cout << "AFTER\n";
-    for(int i=0;i<4;i++) {
-        for(int j=0;j<4;j++) {
-            if(i == y && j == x) printf("XX ");
-            else if(loc[i][j]->is_alive) printf("%02d ", loc[i][j]->id);
-            else printf("__ ");
-        }
-        cout << "\n";
-    }
-    cout << "\n";
 }
 
 void go(int y, int x, int dir, int count) {
-    loc[y][x]->is_alive = false;
-    count += loc[y][x]->id;
-    Fish* loc_ori[SIZE][SIZE];
+    fishes[loc[y][x]].is_alive = false;
+    count += fishes[loc[y][x]].id;
+    int loc_ori[SIZE][SIZE];
     Fish fishes_ori[SIZE*SIZE+1];
     memcpy(loc_ori, loc, sizeof(loc));
     memcpy(fishes_ori, fishes, sizeof(fishes));
 
     moveFish(y, x);
-    cout << "Count: " << count << "\n\n";
 
     int ny = y;
     int nx = x;
     while(isValid(ny, nx)) {
         ny += dy[dir];
         nx += dx[dir];
-        if(!isValid(ny, nx) || !loc[ny][nx]->is_alive) {
+        if(!isValid(ny, nx) || !fishes[loc[ny][nx]].is_alive) {
             answer = max(answer, count);
             continue;
         }
-        go(ny, nx, loc[ny][nx]->dir, count);
+        go(ny, nx, fishes[loc[ny][nx]].dir, count);
     }
 
-    loc[y][x]->is_alive = true;
+    fishes[loc[y][x]].is_alive = true;
     memcpy(loc, loc_ori, sizeof(loc));
     memcpy(fishes, fishes_ori, sizeof(fishes));
 }
@@ -109,10 +97,10 @@ int main() {
         int id, dir;
         cin >> id >> dir;
         fishes[id] = {i, j, id, dir-1, true};
-        loc[i][j] = &fishes[id];
+        loc[i][j] = id;
     }
 
-    go(0, 0, loc[0][0]->dir, 0);
+    go(0, 0, fishes[loc[0][0]].dir, 0);
 
     cout << answer;
     
