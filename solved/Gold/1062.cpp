@@ -31,19 +31,20 @@ void init() {
 }
 
 void dfs(int using_char, int num_using, int idx_next) {
-    if(num_using >= K || used_char == using_char) {
+    if(num_using == K) {
         int readable = 0;
         for(int i=0;i<N;i++) {
-            if(bits[i] & using_char == bits[i]) readable++;
+            if((bits[i] & using_char) == bits[i]) readable++;
         }
 
         answer = max(answer, readable);
-
         return;
     }
 
     for(int i=idx_next;i<MAX_K;i++) {
-        if((used_char & (1 << i)) > 0) dfs(using_char | (1 << i), num_using+1, i+1);
+        if((used_char & (1<<i)) != 0) { // when if char is used, pick
+            dfs(using_char | (1<<i), num_using+1, i+1);
+        }
     }
 }
 
@@ -59,6 +60,8 @@ void input(int N, int K) {
             used_char |= (1 << (inputs[i][j] - 'a'));
         }
     }
+
+    return;
 }
 
 int main() {
@@ -72,6 +75,14 @@ int main() {
         return 0;
     }
 
+    int num_used = 0;
+    for(int i=0;i<MAX_K;i++) if((used_char & (1 << i)) != 0) num_used++;
+    if(num_used <= K) {
+        cout << N;
+        return 0;
+    }
+
+    // void dfs(int using_char, int num_using, int idx_next)
     dfs(0, 0, 0);
 
     cout << answer;
