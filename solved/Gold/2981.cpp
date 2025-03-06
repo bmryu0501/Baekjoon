@@ -8,16 +8,16 @@
 #include <algorithm>
 using namespace std;
 
-/* Á¶°Ç */
+/* ì¡°ê±´ */
 #define MAX_N 100
 #define MAX_NUM 1000000000
 
-/* º¯¼ö */
+/* ë³€ìˆ˜ */
 int N;
 int arr[MAX_N + 1];
 int gcd;
 
-/* ÇÔ¼ö */
+/* í•¨ìˆ˜ */
 int GCD(int a, int b) {
     if(a % b == 0) return b;
     return GCD(b, a%b);
@@ -39,20 +39,20 @@ int main() {
     cout.tie(NULL);
     /*****************/
 
-    /* ÀÔ·Â */
+    /* ì…ë ¥ */
     cin >> N;
     for(int i = 0; i < N; i++) {
         cin >> arr[i];
     }
     sort(arr, arr+N);
 
-    /* Ç®ÀÌ */
+    /* í’€ì´ */
     gcd = arr[1] - arr[0];
     for(int i = 2; i < N; i++) {
         if(arr[i] - arr[0] % gcd == 0) continue;
         gcd = GCD(arr[i] - arr[0], gcd);
     }
 
-    /* Ãâ·Â */
+    /* ì¶œë ¥ */
     printDivisors(gcd);
 }
